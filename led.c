@@ -3,10 +3,10 @@
 
 void led_init(void)
 {
-    P1DIR |= 0x01; // Set P1.0 to output direction (0x01 = binary 0000 0001)
+    P1DIR |= 0x40; // Set P1.6 to output direction (0x40 = binary 0100 0000)
 }
 
 void led_toggle(void)
 {
-    P1OUT ^= 0x01; // Toggle P1.0 using exclusive-OR
+    P1OUT ^= 0x40; // Toggle P1.6 using exclusive-OR
 }

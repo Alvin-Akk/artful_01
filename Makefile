@@ -7,9 +7,14 @@ LIB_DIRS = $(MSPGCC_INCLUDE_DIR)
 BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
 BIN_DIR = $(BUILD_DIR)/bin
+TI_CCS_DIR = D:/dev/tools/ccs2041/ccs
+DEBUG_BIN_DIR = $(TI_CCS_DIR)/ccs_base/DebugServer/bin
+CCXML = MSP430G2553.ccxml
 
 # Toolchain
 CC = $(MSPGCC_BIN_DIR)/msp430-elf-gcc
+RM = rm
+DEBUG = $(DEBUG_BIN_DIR)/DSLite
 
 # Files
 TARGET = $(BIN_DIR)/blink
@@ -38,9 +43,12 @@ $(OBJ_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
 # Phonies
-.PHONY: all clean
+.PHONY: all clean flash
 
 all: $(TARGET)
 
 clean:
 	$(RM) -r $(BUILD_DIR)
+
+flash: $(TARGET)
+	$(DEBUG) flash --config=$(CCXML) -u $(TARGET)
