@@ -4,12 +4,20 @@ MSPGCC_BIN_DIR = $(MSPGCC_ROOT_DIR)/bin
 MSPGCC_INCLUDE_DIR = $(MSPGCC_ROOT_DIR)/include
 INCLUDE_DIRS = $(MSPGCC_INCLUDE_DIR)
 LIB_DIRS = $(MSPGCC_INCLUDE_DIR)
+BUILD_DIR = build
+OBJ_DIR = $(BUILD_DIR)/obj
+BIN_DIR = $(BUILD_DIR)/bin
 
 # Toolchain
 CC = $(MSPGCC_BIN_DIR)/msp430-elf-gcc
 
 # Files
-TARGET = blink
+TARGET = $(BIN_DIR)/blink
+
+SOURCES = main.c \
+	      led.c
+OBJECTS = $(OBJ_DIR)/main.o \
+	      $(OBJ_DIR)/led.o
 
 # Flags
 MCU = msp430g2553
@@ -19,9 +27,11 @@ LDFLAGS = -mmcu=$(MCU) $(addprefix -L,$(LIB_DIRS))
 
 # Build
 ## Linking
-$(TARGET): main.o led.o
+$(TARGET): $(OBJECTS)
+	@mkdir -p $(dir $@)
 	$(CC) $(LDFLAGS) $^ -o $@
 
 ## Compiling
-%.o: %.c
+$(OBJ_DIR)/%.o: %.c
+	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c -o $@ $^
