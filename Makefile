@@ -16,8 +16,9 @@ TARGET = $(BIN_DIR)/blink
 
 SOURCES = main.c \
 	      led.c
-OBJECTS = $(OBJ_DIR)/main.o \
-	      $(OBJ_DIR)/led.o
+
+OBJECT_NAMES = $(SOURCES:.c=.o)
+OBJECTS = $(patsubst %,$(OBJ_DIR)/%,$(OBJECT_NAMES))
 
 # Flags
 MCU = msp430g2553
