@@ -1,5 +1,6 @@
 # Directories
-MSPGCC_ROOT_DIR = D:/dev/tools/msp430-gcc
+TOOLS_DIR = ${TOOLS_PATH}
+MSPGCC_ROOT_DIR = $(TOOLS_DIR)/msp430-gcc
 MSPGCC_BIN_DIR = $(MSPGCC_ROOT_DIR)/bin
 MSPGCC_INCLUDE_DIR = $(MSPGCC_ROOT_DIR)/include
 
@@ -7,7 +8,7 @@ BUILD_DIR = build
 OBJ_DIR = $(BUILD_DIR)/obj
 BIN_DIR = $(BUILD_DIR)/bin
 
-TI_CCS_DIR = D:/dev/tools/ccs2041/ccs
+TI_CCS_DIR = $(TOOLS_DIR)/ccs2041/ccs
 DEBUG_BIN_DIR = $(TI_CCS_DIR)/ccs_base/DebugServer/bin
 CCXML = MSP430G2553.ccxml
 
