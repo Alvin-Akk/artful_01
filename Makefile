@@ -23,6 +23,7 @@ CC = $(MSPGCC_BIN_DIR)/msp430-elf-gcc
 RM = rm
 DEBUG = $(DEBUG_BIN_DIR)/DSLite
 CPPCHECK = cppcheck
+FORMAT   = clang-format
 
 # Files
 TARGET = $(BIN_DIR)/sumo
@@ -54,7 +55,7 @@ $(OBJ_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
 # Phonies
-.PHONY: all clean flash cppcheck
+.PHONY: all clean flash cppcheck format
 
 all: $(TARGET)
 
@@ -70,3 +71,6 @@ cppcheck:
 	-I $(INCLUDE_DIRS) \
 	$(SOURCES) \
 	-i external/printf
+
+format:
+	@$(FORMAT) -i $(SOURCES)
