@@ -21,6 +21,7 @@ INCLUDE_DIRS = $(MSPGCC_INCLUDE_DIR) \
 CC = $(MSPGCC_BIN_DIR)/msp430-elf-gcc
 RM = rm
 DEBUG = $(DEBUG_BIN_DIR)/DSLite
+CPPCHECK = cppcheck
 
 # Files
 TARGET = $(BIN_DIR)/sumo
@@ -52,7 +53,7 @@ $(OBJ_DIR)/%.o: %.c
 	$(CC) $(CFLAGS) -c -o $@ $^
 
 # Phonies
-.PHONY: all clean flash
+.PHONY: all clean flash cppcheck
 
 all: $(TARGET)
 
@@ -61,3 +62,10 @@ clean:
 
 flash: $(TARGET)
 	$(DEBUG) flash --config=$(CCXML) -u $(TARGET)
+
+cppcheck:
+	@$(CPPCHECK) --quiet --enable=all --error-exitcode=1 \
+	--inline-suppr \
+	-I $(INCLUDE_DIRS) \
+	$(SOURCES) \
+	-i external/printf
