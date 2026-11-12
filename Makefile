@@ -36,3 +36,11 @@ $(TARGET): $(OBJECTS)
 $(OBJ_DIR)/%.o: %.c
 	@mkdir -p $(dir $@)
 	$(CC) $(CFLAGS) -c -o $@ $^
+
+# Phonies
+.PHONY: all clean
+
+all: $(TARGET)
+
+clean:
+	$(RM) -r $(BUILD_DIR)
