@@ -14,9 +14,18 @@ TARGET = blink
 # Flags
 MCU = msp430g2553
 WFLAGS = -Wall -Wextra -Werror -Wshadow
-CFLAGS = $(WFLAGS) $(addprefix -I,$(INCLUDE_DIRS)) -Og -g
+CFLAGS = -mmcu=$(MCU) $(WFLAGS) $(addprefix -I,$(INCLUDE_DIRS)) -Og -g
 LDFLAGS = -mmcu=$(MCU) $(addprefix -L,$(LIB_DIRS))
 
 # Build
-$(TARGET): main.c led.c
-	$(CC) $(CFLAGS) $(LDFLAGS) led.c main.c -o blink
+## Linking
+$(TARGET): main.o led.o
+	$(CC) $(LDFLAGS) led.o main.o -o $(TARGET)
+
+## Compiling
+main.o: main.c
+	$(CC) $(CFLAGS) -c -o main.o main.c
+
+## Compiling
+led.o: led.c
+	$(CC) $(CFLAGS) -c -o led.o led.c
