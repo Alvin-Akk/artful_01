@@ -11,10 +11,12 @@ CC = $(MSPGCC_BIN_DIR)/msp430-elf-gcc
 # Files
 TARGET = blink
 
+# Flags
+MCU = msp430g2553
+WFLAGS = -Wall -Wextra -Werror -Wshadow
+CFLAGS = $(WFLAGS) $(addprefix -I,$(INCLUDE_DIRS)) -Og -g
+LDFLAGS = -mmcu=$(MCU) $(addprefix -L,$(LIB_DIRS))
+
 # Build
 $(TARGET): main.c led.c
-	$(CC) -mmcu=msp430g2553 \
-	-I $(INCLUDE_DIRS) \
-	-L $(LIB_DIRS) \
-	-Og -g -Wall \
-	led.c main.c -o blink
+	$(CC) $(CFLAGS) $(LDFLAGS) led.c main.c -o blink
