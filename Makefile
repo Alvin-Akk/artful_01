@@ -20,7 +20,7 @@ INCLUDE_DIRS = $(MSPGCC_INCLUDE_DIR) \
 
 # Toolchain
 CC = $(MSPGCC_BIN_DIR)/msp430-elf-gcc
-RM = rm
+RM = rm -f
 DEBUG = $(DEBUG_BIN_DIR)/DSLite
 CPPCHECK = cppcheck
 FORMAT   = clang-format
@@ -44,6 +44,19 @@ HEADERS = \
 
 OBJECT_NAMES = $(SOURCES:.c=.o)
 OBJECTS = $(patsubst %,$(OBJ_DIR)/%,$(OBJECT_NAMES))
+
+# Static Analysis
+## Don't check the msp430 helper headers (they have a LOT of ifdefs)
+CPPCHECK_INCLUDES = ./src
+CPPCHECK_IGNORE = external/printf
+CPPCHECK_FLAGS = \
+	--quiet --enable=all --error-exitcode=1 \
+	--inline-suppr \
+	--suppress=missingIncludeSystem \
+	--suppress=unmatchedSuppression \
+	--suppress=unusedFunction \
+	$(addprefix -I,$(CPPCHECK_INCLUDES)) \
+	$(addprefix -i,$(CPPCHECK_IGNORE))
 
 # Flags
 MCU = msp430g2553
@@ -69,17 +82,13 @@ $(OBJ_DIR)/%.o: %.c $(HEADERS)
 all: $(TARGET)
 
 clean:
-	$(RM) -r $(BUILD_DIR)
+	@$(RM) -r $(BUILD_DIR)
 
 flash: $(TARGET)
-	$(DEBUG) flash --config=$(CCXML) -u $(TARGET)
+	@$(DEBUG) flash --config=$(CCXML) -u $(TARGET)
 
 cppcheck:
-	@$(CPPCHECK) --quiet --enable=all --error-exitcode=1 \
-	--inline-suppr \
-	-I $(INCLUDE_DIRS) \
-	$(SOURCES) \
-	-i external/printf
+	@$(CPPCHECK) $(CPPCHECK_FLAGS) $(SOURCES)
 
 format:
 	@$(FORMAT) -i $(SOURCES) $(HEADERS)
